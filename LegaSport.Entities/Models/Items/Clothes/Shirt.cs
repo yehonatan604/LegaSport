@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LegaSport.Entities.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,8 @@ namespace LegaSport.Entities.Models.Items.Clothes
     {
         public int Id { get; set; }
         public Item Item { get; set; }
-        public ColorTypes Color { get; set; }
-        public ShirtSizeTypes Size { get; set; }
+        public string ClothType { get; set; }
+        public string Color { get; set; }
+        public string Size { get; set; }
     }
 }

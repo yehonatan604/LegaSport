@@ -5,60 +5,190 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LegaSport.View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Style="{StaticResource WndStyle}">
-    <TabControl>
-        <TabItem x:Name="StockTab" Header="Stock">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="2*" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <WrapPanel Name="Buttons" Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Name="Btn1" Margin="10" Content="Exercise 1" Click="Btn1_Click" Style="{StaticResource BtnStyle}" />
-                    <Button Name="Btn3" Margin="10" Content="Exercise 2" Style="{StaticResource BtnStyle}" />
-                </WrapPanel>
-                <WrapPanel Name="DataGridPanel" HorizontalAlignment="Center" Grid.Column="4" Margin="0,135,0,0" Grid.RowSpan="2">
-                    <Border>
-                        <Border.BitmapEffect>
-                            <DropShadowBitmapEffect />
-                        </Border.BitmapEffect>
-                        <DataGrid Name="Dgrid" Margin="10" Style="{StaticResource DgridStyle}"/>
-                    </Border>
-                </WrapPanel>
-            </Grid>
-        </TabItem>
-        <TabItem Name="Add" Header="Add">
-            <StackPanel>
-                <WrapPanel Orientation="Horizontal">
-                <StackPanel HorizontalAlignment="Left">
-                    <TextBlock Text="Name:" Margin="5" />
-                    <Border>
-                        <TextBox x:Name="ItemName" Margin="5"  Text="Please Enter Name"/>
-                    </Border>
-                    <TextBlock Text="Item Type:" Margin="5" />
-                        <ComboBox x:Name="Itemsss" Margin="5" />
-                        <TextBlock Text="Price:" Margin="5" />
-                    <Border>
-                        <TextBox x:Name="MyPrice" Margin="5" Text="Please Enter Price:" PreviewTextInput="NumValidate"/>
-                    </Border>
-                    <Button Name="Btn2" Margin="5" Content="Add" Click="Btn2_Click" Style="{StaticResource BtnStyle}" />
-                </StackPanel>
-                    <StackPanel HorizontalAlignment="Left">
-                        <TextBlock Text="Ball Type:" Margin="5" />
-                        <ComboBox x:Name="BallType" Margin="5" />
-                        <TextBlock Text="Color:" Margin="5" />
-                        <ComboBox x:Name="BallColor" Margin="5" />
-                        <Button Name="Btng2" Margin="5,55,5,5" Content="Add" Click="Btn2_Click" Style="{StaticResource BtnStyle}" />
-                    </StackPanel>
-                </WrapPanel>
-                <DataGrid x:Name="Dgrid2"></DataGrid>
-            </StackPanel>
-        </TabItem>
-    </TabControl>
+        Title="MainWindow" Height="450" Width="930" Style="{StaticResource GardientWindow}" Closing="OnExit" Loaded="OnStartUp">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.1*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.1*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
 
+        <TabControl Background="Transparent" Grid.Row="0" Grid.ColumnSpan="3">
+
+            <TabItem x:Name="Stock_Tab" Header="Stock">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="2*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Sell" Margin="5,5,20,0" HorizontalAlignment="Center" FontSize="28"/>
+
+                    <WrapPanel Orientation="Horizontal" Grid.Row="1">
+                        <WrapPanel x:Name="SaleTextBlocks" Orientation="Vertical" >
+                            <TextBlock Text="Id:" />
+                            <TextBlock Text="Quantity:" />
+                        </WrapPanel>
+                        <WrapPanel x:Name="SaleTextBoxes" Orientation="Vertical">
+                            <TextBox x:Name="TboxSellID" />
+                            <TextBox x:Name="TboxSellQuantity" LostFocus="BoxItemPrice_LostFocus" />
+                        </WrapPanel>
+                    </WrapPanel>
+
+                    <Button x:Name="BtnSell" Content="Sell" Grid.Row="2" Style="{StaticResource BtnSellStyle}" Grid.Column="0" 
+                            HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,3,0,0" Click="BtnSell_Click" />
+
+                    <WrapPanel Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,3,0,0" Grid.ColumnSpan="2" Orientation="Vertical">
+                        <TextBox x:Name="TboxSearch" KeyUp="TboxSearch_OnKeyUp" GotFocus="TboxSearch_GotFocus" Text="Search"/>
+                    </WrapPanel>
+
+                    <TextBlock Text="Item Info" Margin="5,5,20,0" HorizontalAlignment="Center" FontSize="28" Grid.Column="1" />
+                    <TextBox Grid.Row="1" Name="TboxInfo" Grid.Column="1" Width="260" Height="80" VerticalAlignment="Top" 
+                             HorizontalAlignment="Center" BorderThickness="0" Text="{Binding SelectedRow}"/>
+
+                    <TextBlock Text="Item Description" Margin="5,5,20,0" HorizontalAlignment="Center" FontSize="28" Grid.Column="2" />
+                    <TextBox Grid.Row="1" Grid.Column="2" Name="TboxDescription" Width="260" Height="80" VerticalAlignment="Top" 
+                             HorizontalAlignment="Center" BorderThickness="0" />
+
+                </Grid>
+            </TabItem>
+
+            <TabItem x:Name="EditStock_Tab" Header="Edit Stock">
+                <Grid>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="27*" />
+                        <ColumnDefinition Width="281*"/>
+                        <ColumnDefinition Width="308*" />
+                        <ColumnDefinition Width="308*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1.2*" />
+                        <RowDefinition Height="3*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <WrapPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3" HorizontalAlignment="Center" Margin="0,0,0,112" Grid.RowSpan="2">
+                        <TextBlock Text="Add Item To Stock" Margin="0,5,20,0" HorizontalAlignment="Center" FontSize="28"/>
+                    </WrapPanel>
+                    <WrapPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Grid.ColumnSpan="2" Margin="211,0,0,112" Grid.RowSpan="2">
+                        <TextBlock Text="Add Item" Margin="5,5,20,0" HorizontalAlignment="Center" FontSize="28"/>
+                    </WrapPanel>
+                    <WrapPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="4" Margin="0,15,0,0">
+                        <WrapPanel x:Name="AddItemTextBlocks" Orientation="Vertical" >
+                            <TextBlock Text="Item Name:" />
+                            <TextBlock Text="Item Price:" />
+                            <TextBlock Text="Item Type:" Margin="5,10,20,0"/>
+                        </WrapPanel>
+                        <WrapPanel x:Name="AddItemTextBoxes" Orientation="Vertical">
+                            <TextBox x:Name="BoxItemName" />
+                            <TextBox x:Name="BoxItemPrice" LostFocus="BoxItemPrice_LostFocus" />
+                            <ComboBox x:Name="BoxItemType" SelectionChanged="BoxItemType_SelectionChanged" />
+                        </WrapPanel>
+                    </WrapPanel>
+                    <WrapPanel Grid.Column="2" Grid.Row="1" Margin="0,15,0,0" Grid.RowSpan="2">
+                        <WrapPanel x:Name="ExtraBoxes" Orientation="Vertical">
+                            <TextBlock Text="Item Inner Type:" Margin="5,5,20,0"/>
+                            <TextBlock Text="Color:" Margin="5,17,20,0" />
+                            <TextBlock Text="Size:" Margin="5,17,20,0"/>
+                        </WrapPanel>
+                        <WrapPanel x:Name="AddItemComboBoxes" Orientation="Vertical">
+                            <ComboBox x:Name="BoxItemInnerType" SelectionChanged="BoxItemInnerType_SelectionChanged"  IsEnabled="False"/>
+                            <ComboBox x:Name="BoxColor" IsEnabled="False" />
+                            <ComboBox x:Name="BoxSizeTypes" IsEnabled="False"/>
+                        </WrapPanel>
+                    </WrapPanel>
+                    <WrapPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="3" Margin="0,15,0,0" HorizontalAlignment="Center">
+                        <WrapPanel x:Name="ExtraBoxes2" Orientation="Vertical">
+                            <TextBlock Text="Item Id:" Margin="0,5,20,0"/>
+                            <TextBlock Text="Quantiy:" Margin="0,5,20,0"/>
+                        </WrapPanel>
+                        <WrapPanel x:Name="AddItemtComboBoxes2" Orientation="Vertical">
+                            <TextBox x:Name="TboxItemId" Margin="5,5,20,0"/>
+                            <TextBox x:Name="TboxQuantity" Margin="5,5,20,0"/>
+                        </WrapPanel>
+                    </WrapPanel>
+                    <WrapPanel x:Name="Buttons" Orientation="Horizontal" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="1" Margin="65,112,0,0" Grid.RowSpan="2">
+                        <Button x:Name="BtnAddItem" Margin="5,5,20,0" Click="BtnAddItem_Click">
+                            <TextBlock Text="Add Item" Margin="0,0,0,0" />
+                        </Button>
+                    </WrapPanel>
+                    <WrapPanel x:Name="Buttons2" Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="3" Margin="0,112,0,0" Grid.RowSpan="2">
+                        <Button x:Name="BtnAddStock" Margin="5,5,20,0" Click="BtnAddStock_Click">
+                            <TextBlock Text="Add Stock" Margin="0,0,0,0" />
+                        </Button>
+                    </WrapPanel>
+                </Grid>
+            </TabItem>
+
+            <TabItem x:Name="Sales_Tab" Header="Sales">
+                <Grid>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="4*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Views" Margin="5,5,20,0" HorizontalAlignment="Center" FontSize="28"/>
+
+                    <WrapPanel Orientation="Horizontal" Grid.Row="1">
+                        <WrapPanel x:Name="SaleViewsRadioBtns" Orientation="Vertical" >
+                            <RadioButton Margin="5,6,0,0"/>
+                            <RadioButton Margin="5,12,0,0"/>
+                            <RadioButton Margin="5,14,0,0"/>
+                            <RadioButton Margin="5,18,0,0"/>
+                            <RadioButton Margin="5,14,0,0"/>
+                        </WrapPanel>
+                        <WrapPanel x:Name="SaleViewsTxts" Orientation="Vertical" >
+                            <TextBlock Text="By Item Id" Margin="10,5,0,0"/>
+                            <TextBlock Text="By Item Type" Margin="10,9,0,0" />
+                            <TextBlock Text="By Salesman" Margin="10,12,0,0"/>
+                            <TextBlock Text="By Date" Margin="10,16,0,0"/>
+                            <TextBlock Text="By Total Price" Margin="10,12,0,0"/>
+                        </WrapPanel>
+                        <WrapPanel x:Name="SalestxtBoxes" Orientation="Vertical" Margin="10,0,0,0">
+                            <TextBox x:Name="TboxByItem" Margin="0,4,0,0"/>
+                            <ComboBox x:Name="TboxByItemType" Margin="0,3,0,0"/>
+                            <ComboBox x:Name="TboxBySalesman" Margin="0,3,0,0"/>
+                            <ComboBox x:Name="TboxByDate" Margin="0,3,0,0"/>
+                            <ComboBox x:Name="TboxByTotalPrice" Margin="0,3,0,0"/>
+                        </WrapPanel>
+                    </WrapPanel>
+
+                    <TextBlock Text="Sale Info" Margin="5,5,20,0" HorizontalAlignment="Center" 
+                               FontSize="28" Grid.Column="1" Grid.ColumnSpan="2"/>
+                    <TextBox Grid.Row="1" Name="TboxInrtyfo" Grid.Column="1" Width="460" Height="137" VerticalAlignment="Top" 
+                             HorizontalAlignment="Center" BorderThickness="0" Grid.ColumnSpan="2"/>
+                </Grid>
+                
+            </TabItem>
+
+            <TabItem x:Name="Employees_Tab" Header="Employees">
+
+            </TabItem>
+
+            <TabItem x:Name="Logs_Tab" Header="Logs">
+
+            </TabItem>
+
+        </TabControl>
+
+        <DataGrid x:Name="Dgrid" Grid.Row="1" Grid.ColumnSpan="3" SelectionChanged="Dgrid_SelectionChanged" Background="Transparent"/>
+
+    </Grid>
 </Window>
+

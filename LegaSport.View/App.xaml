@@ -4,54 +4,18 @@
              xmlns:local="clr-namespace:LegaSport.View"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <Style x:Key="WndStyle" TargetType="Window">
-            <Setter Property="Background">
-                <Setter.Value>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="#FF646EA4" Offset="0"/>
-                        <GradientStop Color="White" Offset="1"/>
-                    </LinearGradientBrush>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="BtnStyle" TargetType="Button">
-            <Setter Property="FontFamily" Value="Britannic" />
-            <Setter Property="FontSize" Value="18"/>
-            <Setter Property="Background">
-                <Setter.Value>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="#FF646EA4" Offset="0"/>
-                        <GradientStop Color="White" Offset="1"/>
-                    </LinearGradientBrush>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="DgridStyle" TargetType="DataGrid">
-            <Setter Property="AlternatingRowBackground">
-                <Setter.Value>
-                    <SolidColorBrush Color="AliceBlue" />
-                </Setter.Value>
-            </Setter>
-            <Setter Property="RowBackground">
-                <Setter.Value>
-                    <SolidColorBrush Color="LightGray" />
-                </Setter.Value>
-            </Setter>
-
-            <Setter Property="ColumnHeaderStyle">
-                <Setter.Value>
-                    <Style TargetType="DataGridColumnHeader">
-                        <Setter Property="Background">
-                            <Setter.Value>
-                                <SolidColorBrush Color="Azure" />
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="\Themes\ResourceDictionaries\WindowStyles.xaml" />
+                <ResourceDictionary Source="\Themes\ResourceDictionaries\BtnStyles.xaml" />
+                <ResourceDictionary Source="\Themes\ResourceDictionaries\DataGridStyles.xaml" />
+                <ResourceDictionary Source="\Themes\ResourceDictionaries\TextBoxStyles.xaml" />
+                <ResourceDictionary Source="\Themes\ResourceDictionaries\TextBlockStyles.xaml" />
+                <ResourceDictionary Source="\Themes\ResourceDictionaries\PasswordBoxStyles.xaml" />
+                <ResourceDictionary Source="\Themes\ResourceDictionaries\ComboBoxStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+        
     </Application.Resources>
 
 </Application>

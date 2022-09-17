@@ -4,13 +4,38 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LegaSport.Entities
+namespace LegaSport.Entities.Enums
 {
+    public enum ActionTypes
+    {
+        Login,
+        Logoff,
+        LoginFailed,
+        ForgotPaswword,
+        Register,
+        RegisterFailed,
+        AddItem,
+        AddItemFailed,
+        RemoveItem,
+        AddStock,
+        RemoveStock,
+        Sale,
+        StartUp,
+        Exit,
+        Crush
+    }
+    public enum TxtBoxNames
+    {
+        TxtKeepLogged,
+        TxtIForgot,
+        TxtRegister
+    }
     public enum UserTypes
     {
         Admin,
         Manager,
-        SalesMan
+        SalesMan,
+        No_User = 500
     }
     public enum ItemTypes
     {
@@ -18,6 +43,13 @@ namespace LegaSport.Entities
         Ball,
         Net,
         Bat
+    }
+    public enum ClotheType
+    {
+        Shirt,
+        Pants,
+        Shorts,
+        Shoes
     }
     public enum ColorTypes
     {
@@ -35,21 +67,6 @@ namespace LegaSport.Entities
         Medium,
         Large,
         Extra_Large
-    }
-    public enum ShoeTypes
-    {
-        FootBall,
-        Soccer,
-        Running,
-        Daily,
-        Golf
-    }
-    public enum PantsTypes
-    {
-        Bermuda,
-        Long,
-        Training,
-        Swimming
     }
     public enum BallTypes
     {

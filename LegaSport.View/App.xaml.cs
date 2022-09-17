@@ -9,7 +9,7 @@ using System.Windows;
 namespace LegaSport.View
 {
     /// <summary>
-    /// Interaction logic for App.xaml
+    /// Interaction writer for App.xaml
     /// </summary>
     public partial class App : Application
     {

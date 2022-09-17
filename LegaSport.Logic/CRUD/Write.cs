@@ -21,7 +21,7 @@ namespace LegaSport.Logic.CRUD
         private static string LoggedUserEmail { get; set; } = string.Empty;
         public static bool IsRememberMe { get; set; } = false;
         public int NoUserId { get; set; }
-        
+
         // Constructor
         public Write()
         {
@@ -59,8 +59,8 @@ namespace LegaSport.Logic.CRUD
         public void AddStock(int itemId, int quantity)
         {
             var id = from stock in db.Stocks
-                        where stock.Item.Id == itemId
-                        select stock;
+                     where stock.Item.Id == itemId
+                     select stock;
 
             if (id.Any())
             {
@@ -70,9 +70,9 @@ namespace LegaSport.Logic.CRUD
                 return;
             }
 
-            db.Stocks.Add(new Stock() 
-            { 
-                Item = db.Items.Single(x => x.Id == itemId), 
+            db.Stocks.Add(new Stock()
+            {
+                Item = db.Items.Single(x => x.Id == itemId),
                 Quantity = quantity,
                 LastAdded = DateTime.Now
             });
@@ -87,16 +87,28 @@ namespace LegaSport.Logic.CRUD
 
             if (quantity <= db.Stocks.Single(x => x.Item.Id == itemId).Quantity)
             {
+                double tprice = db.Items.Single(x => x.Id == itemId).Price * quantity;
+                int? scount = db.Users.Single(x => x.Id == LoggedInUser.Id).SalesCount;
+                double? stotal = db.Users.Single(x => x.Id == LoggedInUser.Id).SalesTotal;
+
+                scount = scount == null ? 1 : scount++;
+                stotal = stotal == null ? tprice : stotal += tprice;
+
                 db.Stocks.Single(x => x.Item.Id == itemId).Quantity -= quantity;
+                db.Users.Single(x => x.Id == LoggedInUser.Id).LastSale = DateTime.Now;
+                db.SaveChanges();
+
+
                 db.Sales.Add(new Sale()
-                { 
+                {
                     Item = db.Items.Single(x => x.Id == itemId),
                     Quantity = quantity,
-                    TotalPrice = db.Items.Single(x => x.Id == itemId).Price * quantity,
+                    TotalPrice = tprice,
                     SaleDate = DateTime.Now,
-                    SalesMan = LoggedInUser
+                    User = LoggedInUser
                 });
                 db.SaveChanges();
+                AddLog(LoggedInUser.Id, $"Sale! {LoggedInUser.Id} made a sale: {tprice}$", ActionTypes.Sale);
                 return true;
             }
             return false;

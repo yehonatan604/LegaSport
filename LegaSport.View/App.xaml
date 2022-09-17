@@ -13,6 +13,7 @@
                 <ResourceDictionary Source="\Themes\ResourceDictionaries\TextBlockStyles.xaml" />
                 <ResourceDictionary Source="\Themes\ResourceDictionaries\PasswordBoxStyles.xaml" />
                 <ResourceDictionary Source="\Themes\ResourceDictionaries\ComboBoxStyles.xaml" />
+                <ResourceDictionary Source="\Themes\ResourceDictionaries\TabControlStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
         

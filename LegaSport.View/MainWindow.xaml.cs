@@ -19,6 +19,7 @@ using System.Windows.Shapes;
 using LegaSport.Entities.Enums;
 using LegaSport.Logic.CRUD;
 using LegaSport.View.Utilities;
+using System.Windows.Threading;
 
 namespace LegaSport.View
 {
@@ -42,8 +43,11 @@ namespace LegaSport.View
                 loginWindow = new();
                 loginWindow.ShowDialog();
             }
+            Dgrid2.Visibility= Visibility.Collapsed;
 
             Dgrid.ItemsSource = reader.GetTable().ToList();
+            Dgrid2.ItemsSource = reader.GetTable("Sales").ToList();
+
             Fill(new ItemTypes(), BoxItemType);
             Fill(new ColorTypes(), BoxColor);
 
@@ -51,26 +55,54 @@ namespace LegaSport.View
             Sales_Tab.IsEnabled = reader.CheckAuthorizationLevel() < 2;
             Employees_Tab.IsEnabled = reader.CheckAuthorizationLevel() == 0;
             Logs_Tab.IsEnabled = reader.CheckAuthorizationLevel() == 0;
+
+            StartClock();
+
+            LblUser.Content = $"{Write.LoggedInUser.FirstName} {Write.LoggedInUser.LastName}";
+
+            FillSalesBoxes();
+        }
+
+        // Digital Clock
+        private void StartClock()
+        {
+            DispatcherTimer clock = new DispatcherTimer();
+            clock.Interval = TimeSpan.FromSeconds(1);
+            clock.Tick += timer_Tick;
+            clock.Start();
+        }
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            LblTime.Content = DateTime.UtcNow.ToString("dddd, dd MMMM yyyy HH:mm:ss");
         }
 
         // Stock_Tab Event Handlers
         private void BtnSell_Click(object sender, RoutedEventArgs e)
         {
             writer.AddSale(Convert.ToInt16(TboxSellID.Text), Convert.ToInt16(TboxSellQuantity.Text));
+            MessageBox.Show("Sale!");
+        }
+        private void Dgrid2_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            TboxSaleInfo.Text = $"Item: {GetDgridContent(Dgrid2, 1)}\n" +
+                                $"Type: {GetDgridContent(Dgrid2, 2)}\n\n" + 
+                                $"{GetDgridContent(Dgrid2, 4)} units were soled for total of {GetDgridContent(Dgrid2, 5)}\n" +
+                                $"at {GetDgridContent(Dgrid2, 9)}\n" +
+                                $"by: {GetDgridContent(Dgrid2, 7)} {GetDgridContent(Dgrid2, 8)}, id: {GetDgridContent(Dgrid2, 6)}";
         }
         private void Dgrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            TboxInfo.Text = $"{GetDgridContent(1)}\n\n" +
-                            $"Id: {GetDgridContent()}\n" +
-                            $"Price: {GetDgridContent(3)}\n" +
-                            $"In Stock: {GetDgridContent(4)}\n";
+            TboxInfo.Text = $"{GetDgridContent(Dgrid, 1)}\n" +
+                            $"Id: {GetDgridContent(Dgrid)}\n" +
+                            $"Price: {GetDgridContent(Dgrid, 3)}\n" +
+                            $"In Stock: {GetDgridContent(Dgrid, 4)}\n";
 
-            TboxDescription.Text = $"{GetDgridContent(1)}\n\n" +
-                                   $"is a {GetDgridContent(2)} " +
-                                   $"and it costs {GetDgridContent(3)} Shekels.\n" +
-                                   $"we are working with this product\nsince: {GetDgridContent(5)}";
+            TboxDescription.Text = $"{GetDgridContent(Dgrid, 1)}\n" +
+                                   $"is a {GetDgridContent(Dgrid, 2)} " +
+                                   $"and it costs {GetDgridContent(Dgrid, 3)} Shekels.\n" +
+                                   $"we are working with this product\nsince: {GetDgridContent(Dgrid, 5)}";
 
-            TboxSellID.Text = GetDgridContent();
+            TboxSellID.Text = GetDgridContent(Dgrid);
         }
         private void TboxSearch_GotFocus(object sender, RoutedEventArgs e)
         {
@@ -82,6 +114,12 @@ namespace LegaSport.View
         {
             Dgrid.ItemsSource = reader.Search(TboxSearch.Text).ToList();
 
+        }
+        private void Stocks_Tabs_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Dgrid.ItemsSource = reader.GetTable().ToList();
+            Dgrid2.Visibility = Visibility.Collapsed;
+            Dgrid.Visibility = Visibility.Visible;
         }
 
         // EditStock_Tab Event Handlers
@@ -226,11 +264,50 @@ namespace LegaSport.View
 
         // Sales_Tab Event Handlers
 
+        private void Sales_Tab_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (reader.CheckAuthorizationLevel() > 1)
+            {
+                MessageBox.Show("You are not authorized to do that!");
+                return;
+            }
+            Dgrid.Visibility = Visibility.Collapsed;
+            Dgrid2.Visibility = Visibility.Visible;
+        }
+        private void TboxByItem_KeyUp(object sender, KeyEventArgs e)
+        {
+            Dgrid2.ItemsSource = reader.GetTable("ByItemId", TboxByItem.Text).ToList();
+        }
+        private void TboxByItemType_DropDownClosed(object sender, EventArgs e)
+        {
+            Dgrid2.ItemsSource = reader.GetTable("ByType", TboxByItemType.Text).ToList();
+        }
+        private void TboxBySalesman_DropDownClosed(object sender, EventArgs e)
+        {
+            Dgrid2.ItemsSource = reader.GetTable("BySalseMan", TboxBySalesman.Text).ToList();
+        }
+        private void TboxByDate_DropDownClosed(object sender, EventArgs e)
+        {
+            Dgrid2.ItemsSource = reader.GetTable("ByDate", TboxByDate.Text).ToList();
+        }
+        private void BtnMinMax_Click(object sender, RoutedEventArgs e)
+        {
+            Dgrid2.ItemsSource = reader.GetTable("ByTPrice", TboxMin.Text, TboxMax.Text).ToList();
+        }
+        private void TboxMin_GotFocus(object sender, RoutedEventArgs e)
+        {
+            TboxMin.Text = string.Empty;
+        }
+        private void TboxMax_GotFocus(object sender, RoutedEventArgs e)
+        {
+            TboxMax.Text = string.Empty;
+        }
+
         // Employees_Tab Event Handlers
 
         // Logs_Tab Event Handlers
 
-        // Exit/Etart Event Handlers event handlers
+        // Exit/Etart Event Handlers
         private void OnExit(object sender, CancelEventArgs e)
         {
             writer.ExitProgram();
@@ -271,11 +348,26 @@ namespace LegaSport.View
                     }
             }
         }
+        private void FillSalesBoxes()
+        {
+            foreach (string str in reader.GetList("ByItem"))
+            {
+                TboxByItemType.Items.Add(str);
+            }
+            foreach (string str in reader.GetList("BySalesMan"))
+            {
+                TboxBySalesman.Items.Add(str);
+            }
+            foreach (string str in reader.GetList("ByDate"))
+            {
+                TboxByDate.Items.Add(str);
+            }
+        }
 
         // Get Content from DataGrid
-        private string GetDgridContent(int cell = 0)
+        private string GetDgridContent(DataGrid dGrid, int cell = 0)
         {
-            return ((TextBlock)Dgrid.SelectedCells[cell].Column.GetCellContent(Dgrid.SelectedCells[cell].Item)).Text;
+            return ((TextBlock)dGrid.SelectedCells[cell].Column.GetCellContent(dGrid.SelectedCells[cell].Item)).Text;
         }
     }
 }

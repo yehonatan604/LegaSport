@@ -1,5 +1,6 @@
 ﻿using LegaSport.Entities.Enums;
 using LegaSport.Entities.Models.Context;
+using LegaSport.Entities.Models.Items;
 using LegaSport.Entities.Models.Users;
 using System;
 using System.Collections.Generic;
@@ -55,19 +56,132 @@ namespace LegaSport.Logic.CRUD
         }
 
         // Return Table Methods
-        public IEnumerable<object> GetTable(string s = "*")
+        public IEnumerable<object> GetTable(string s = "*", string arg1 = "", string arg2 = "")
         {
             switch (s)
             {
-                case nameof(db.Stocks): { return db.Stocks; }
+                case "ByItemId":
+                    {
+                        return from sale in db.Sales
+                               where sale.Item.Id == Convert.ToInt16(arg1)
+                               select new
+                               {
+                                   ItemID = sale.Item.Id,
+                                   ItemName = sale.Item.Name,
+                                   sale.Item.ItemType,
+                                   sale.Item.Price,
+                                   sale.Quantity,
+                                   sale.TotalPrice,
+                                   salesManId = sale.User.Id,
+                                   salesManFName = sale.User.FirstName,
+                                   salesManLName = sale.User.LastName,
+                                   sale.SaleDate
+                               };
+                    }
+                case "ByType":
+                    {
+                        return from sale in db.Sales
+                               where sale.Item.ItemType == arg1
+                               select new
+                               {
+                                   ItemID = sale.Item.Id,
+                                   ItemName = sale.Item.Name,
+                                   sale.Item.ItemType,
+                                   sale.Item.Price,
+                                   sale.Quantity,
+                                   sale.TotalPrice,
+                                   salesManId = sale.User.Id,
+                                   salesManFName = sale.User.FirstName,
+                                   salesManLName = sale.User.LastName,
+                                   sale.SaleDate
+                               };
+                    }
+                case "BySalseMan":
+                    {
+                        return from sale in db.Sales
+                               where sale.User.Id == Convert.ToInt16(arg1)
+                               select new
+                               {
+                                   ItemID = sale.Item.Id,
+                                   ItemName = sale.Item.Name,
+                                   sale.Item.ItemType,
+                                   sale.Item.Price,
+                                   sale.Quantity,
+                                   sale.TotalPrice,
+                                   salesManId = sale.User.Id,
+                                   salesManFName = sale.User.FirstName,
+                                   salesManLName = sale.User.LastName,
+                                   sale.SaleDate
+                               };
+                    }
+                case "ByDate":
+                    {
+                        return from sale in db.Sales
+                               where sale.SaleDate.Date.ToString() == arg1
+                               select new
+                               {
+                                   ItemID = sale.Item.Id,
+                                   ItemName = sale.Item.Name,
+                                   sale.Item.ItemType,
+                                   sale.Item.Price,
+                                   sale.Quantity,
+                                   sale.TotalPrice,
+                                   salesManId = sale.User.Id,
+                                   salesManFName = sale.User.FirstName,
+                                   salesManLName = sale.User.LastName,
+                                   sale.SaleDate
+                               };
+                    }
+                case "ByTPrice":
+                    {
+                        return from sale in db.Sales
+                               where sale.TotalPrice > Convert.ToInt32(arg1) && sale.TotalPrice < Convert.ToInt32(arg2)
+                               select new
+                               {
+                                   ItemID = sale.Item.Id,
+                                   ItemName = sale.Item.Name,
+                                   sale.Item.ItemType,
+                                   sale.Item.Price,
+                                   sale.Quantity,
+                                   sale.TotalPrice,
+                                   salesManId = sale.User.Id,
+                                   salesManFName = sale.User.FirstName,
+                                   salesManLName = sale.User.LastName,
+                                   sale.SaleDate
+                               };
+                    }
+                case nameof(db.Sales): 
+                    {
+                        return from sale in db.Sales
+                               select new 
+                               {
+                                   ItemID = sale.Item.Id,
+                                   ItemName = sale.Item.Name,
+                                   sale.Item.ItemType,
+                                   sale.Item.Price,
+                                   sale.Quantity,
+                                   sale.TotalPrice,
+                                   salesManId = sale.User.Id,
+                                   salesManFName = sale.User.FirstName,
+                                   salesManLName = sale.User.LastName,
+                                   sale.SaleDate
+                               }; 
+                    }
                 default:
                     {
                         return from item in db.Items
                                join stock in db.Stocks
                                on item.Id equals stock.Item.Id
-                               select new { item.Id, item.Name, item.ItemType, 
-                                            item.Price, stock.Quantity, item.Created, 
-                                            stock.LastAdded };
+                               select new
+                               {
+                                   item.Id,
+                                   item.Name,
+                                   item.ItemType,
+                                   item.Price,
+                                   stock.Quantity,
+                                   item.Created,
+                                   stock.LastAdded
+                               };
                     }
             };
         }
@@ -76,6 +190,33 @@ namespace LegaSport.Logic.CRUD
             return from items in db.Items
                    where (items.Name).Contains(str)
                    select items;
+        }
+
+        // Return List Methods
+        public List<string> GetList(string s)
+        {
+            switch (s)
+            {
+                case "ByItem":
+                    {
+                        return (from sale in db.Sales
+                               select sale.Item.ItemType.ToString()).Distinct().ToList();
+                    }
+                case "BySalesMan":
+                    {
+                        return(from sale in db.Sales
+                                select sale.User.Id.ToString()).Distinct().ToList();
+                    }
+                case "ByDate":
+                    {
+                        return (from sale in db.Sales
+                                select sale.SaleDate.Date.ToString()).Distinct().ToList();
+                    }
+                default:
+                    {
+                        return new List<string>();
+                    }
+            }
         }
     }
 }

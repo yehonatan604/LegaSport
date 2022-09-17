@@ -14,7 +14,6 @@ namespace LegaSport.Entities.Models.Context
     public class StoreContext : DbContext
     {
         public DbSet<User> Users { get; set; }
-        public DbSet<SalesMan> SalesMen { get; set; }
         public DbSet<Logged> LoggedIns { get; set; }
         public DbSet<Log> Logs { get; set; }
 

@@ -16,6 +16,7 @@ The software's main view is divided into 5 sections:
 •	Logs - this view is limited for admin only; the admin can inspect logs & save them to txt files.
 
 
+
 Features:
 
 •	User Registration: - In this module user must register himself by filling some personal details.

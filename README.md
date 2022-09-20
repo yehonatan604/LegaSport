@@ -15,6 +15,7 @@ The software's main view is divided into 5 sections:
 
 •	Logs - this view is limited for admin only; the admin can inspect logs & save them to txt files.
 
+
 Features:
 
 •	User Registration: - In this module user must register himself by filling some personal details.
@@ -31,11 +32,13 @@ Features:
 
 •	 Logs: - Every single operation is recorded to the log. Admin can inspect the logs easily by using different views that then can be saved to txt files.
 
+
 Software Requirements:
 
 •	Windows 10
 
 •	Microsoft SQL Server
+
 
 Hardware Components:
 
@@ -45,6 +48,7 @@ Hardware Components:
 
 •	Memory – 1GB RAM
 
+
 Advantages:
 
 •	Salesmen can easily search for items in stock in order to make sales.
@@ -53,13 +57,16 @@ Advantages:
 
 •	Admin can easily inspect workers performance & more via the logs which are created for every single user action.
 
+
 Disadvantages:
 
 •	Desktop only.
 
+
 Application:
 
 This application is useful for many Stores. This application can be used for selling other products with little modification of the system.
+
 
 Project Features:
 

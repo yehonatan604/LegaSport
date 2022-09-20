@@ -8,6 +8,9 @@ using LegaSport.Entities.Models.Users;
 using LegaSport.Entities.Enums;
 using LegaSport.Entities.Models.Items.Clothes;
 using LegaSport.Entities.Models.Items.Accesories;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.DependencyInjection;
+using System.Security.Cryptography;
 
 namespace LegaSport.Logic.CRUD
 {
@@ -35,7 +38,34 @@ namespace LegaSport.Logic.CRUD
             LoggedUserEmail = email;
         }
 
-        // Add to-logs Methods
+        // Public Methods for changing selected user details
+        public void ChangeUserType(int id, string type)
+        {
+            db.Users.Single(user => user.Id == id).UserType = (UserTypes)Enum.Parse(typeof(UserTypes), type);
+            db.SaveChanges();
+        }
+        public void ChangeUserEmail(int id, string email)
+        {
+            db.Users.Single(user => user.Id == id).Email = email;
+            db.SaveChanges();
+        }
+        public void ChangeUserHireDate(int id, string date)
+        {
+            db.Users.Single(user => user.Id == id).HireDate = Convert.ToDateTime(date).Date;
+            db.SaveChanges();
+        }
+        public void ChangeUserPassword(int id, string password)
+        {
+            db.Users.Single(user => user.Id == id).Password = password;
+            db.SaveChanges();
+        }
+        public void RemoveUser(int id)
+        {
+            db.Users.Remove(db.Users.Single(user => user.Id == id));
+            db.SaveChanges();
+        }
+
+        // Add to log Methods
         public void AddLoggedIn(int id)
         {
             db.LoggedIns.Add(new Logged() { DateTime = DateTime.Now, User = db.Users.Single(x => x.Id == id) });
@@ -55,7 +85,7 @@ namespace LegaSport.Logic.CRUD
             db.SaveChanges();
         }
 
-        // Add to-db Methods
+        // Add to db Methods
         public void AddStock(int itemId, int quantity)
         {
             var id = from stock in db.Stocks
@@ -78,7 +108,6 @@ namespace LegaSport.Logic.CRUD
             });
             db.SaveChanges();
         }
-
         public bool AddSale(int itemId, int quantity)
         {
             var id = from stock in db.Stocks
@@ -113,7 +142,6 @@ namespace LegaSport.Logic.CRUD
             }
             return false;
         }
-
         public void AddNewItem(string name, ItemTypes itemType, double price,
                                BallTypes balltype = BallTypes.Soccer, ColorTypes color = ColorTypes.White,
                                ShirtSizeTypes shirtSize = ShirtSizeTypes.Medium, int size = 0,
@@ -211,7 +239,6 @@ namespace LegaSport.Logic.CRUD
             AddLog(id, $"id: {LoggedInUser.Id} added a new item: {name}", ActionTypes.AddItem);
             AddStock(id, 0);
         }
-
         public bool AddNewUser(string firstName, string lastName, UserTypes userType,
                                string email, string password)
         {
@@ -270,7 +297,7 @@ namespace LegaSport.Logic.CRUD
             {
                 userId = (from user in db.LoggedIns
                           orderby user.Id
-                          select user.Id).Last();
+                          select user.User.Id).Last();
 
                 LoggedUserEmail = (from user in db.LoggedIns
                                    orderby user.Id
@@ -294,9 +321,12 @@ namespace LegaSport.Logic.CRUD
             if (IsRememberMe)
             {
                 LoggedInUser.RememberMe = true;
+                LoggedInUser = (from user in db.LoggedIns
+                                orderby user.Id
+                                select user.User).Last();
             }
 
-            AddLog(userId, $"id:{userId} start program", ActionTypes.StartUp);
+            AddLog(LoggedInUser.Id, $"id:{LoggedInUser.Id} start program", ActionTypes.StartUp);
         }
         public void OnStartProgram()
         {

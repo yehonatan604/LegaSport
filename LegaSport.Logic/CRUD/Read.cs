@@ -56,7 +56,7 @@ namespace LegaSport.Logic.CRUD
         }
 
         // Return Table Methods
-        public IEnumerable<object> GetTable(string s = "*", string arg1 = "", string arg2 = "")
+        public IEnumerable<object> GetTable(string s = "*", string arg1 = "", string arg2 = "", string arg3 = "")
         {
             switch (s)
             {
@@ -150,10 +150,10 @@ namespace LegaSport.Logic.CRUD
                                    sale.SaleDate
                                };
                     }
-                case nameof(db.Sales): 
+                case "Sales":
                     {
                         return from sale in db.Sales
-                               select new 
+                               select new
                                {
                                    ItemID = sale.Item.Id,
                                    ItemName = sale.Item.Name,
@@ -165,7 +165,140 @@ namespace LegaSport.Logic.CRUD
                                    salesManFName = sale.User.FirstName,
                                    salesManLName = sale.User.LastName,
                                    sale.SaleDate
-                               }; 
+                               };
+                    }
+                case "Users":
+                    {
+                        return from user in db.Users
+                               select new
+                               {
+                                   UserID = user.Id,
+                                   user.FirstName,
+                                   user.LastName,
+                                   user.Email,
+                                   user.HireDate,
+                                   user.SalesTotal,
+                                   user.SalesCount,
+                                   UserType = user.UserType.ToString()
+                               };
+                    }
+                case "Logs":
+                    {
+                        return from log in db.Logs
+                               orderby log.Id ascending
+                               select new
+                               {
+                                   log.Id,
+                                   UserId = log.User.Id,
+                                   log.User.FirstName,
+                                   log.User.LastName,
+                                   ActionType = log.ActionType.ToString(),
+                                   log.DateTime
+                               };
+                    }
+                case "LogsById":
+                    {
+                        return from log in db.Logs
+                               orderby log.Id ascending
+                               where log.User.Id == Convert.ToInt16(arg1)
+                               select new
+                               {
+                                   log.Id,
+                                   UserId = log.User.Id,
+                                   log.User.FirstName,
+                                   log.User.LastName,
+                                   ActionType = log.ActionType.ToString(),
+                                   log.DateTime
+                               };
+                    }
+                case "LogsByDate":
+                    {
+                        return from log in db.Logs
+                               orderby log.Id ascending
+                               where log.DateTime.ToString() == arg1
+                               select new
+                               {
+                                   log.Id,
+                                   UserId = log.User.Id,
+                                   log.User.FirstName,
+                                   log.User.LastName,
+                                   ActionType = log.ActionType.ToString(),
+                                   log.DateTime
+                               };
+                    }
+                case "LogsByAction":
+                    {
+                        return from log in db.Logs
+                               orderby log.Id ascending
+                               where log.ActionType == (ActionTypes)Enum.Parse(typeof(ActionTypes), arg1)
+                               select new
+                               {
+                                   log.Id,
+                                   UserId = log.User.Id,
+                                   log.User.FirstName,
+                                   log.User.LastName,
+                                   ActionType = log.ActionType.ToString(),
+                                   log.DateTime
+                               };
+                    }
+                case "LogsByActionDate":
+                    {
+                        return from log in db.Logs
+                               where log.ActionType == (ActionTypes)Enum.Parse(typeof(ActionTypes), arg1) && log.DateTime.Date.ToString() == arg2
+                               select new
+                               {
+                                   log.Id,
+                                   UserId = log.User.Id,
+                                   log.User.FirstName,
+                                   log.User.LastName,
+                                   ActionType = log.ActionType.ToString(),
+                                   log.DateTime
+                               };
+                    }
+                case "LogsByActionId":
+                    {
+                        return from log in db.Logs
+                               orderby log.Id ascending
+                               where log.User.Id == Convert.ToInt16(arg1) && log.ActionType == (ActionTypes)Enum.Parse(typeof(ActionTypes), arg2)
+                               select new
+                               {
+                                   log.Id,
+                                   UserId = log.User.Id,
+                                   log.User.FirstName,
+                                   log.User.LastName,
+                                   ActionType = log.ActionType.ToString(),
+                                   log.DateTime
+                               };
+                    }
+                case "LogsByUserIdDate":
+                    {
+                        return from log in db.Logs
+                               orderby log.Id ascending
+                               where log.DateTime.Date.ToString() == arg1 && log.User.Id == Convert.ToInt16(arg2)
+                               select new
+                               {
+                                   log.Id,
+                                   UserId = log.User.Id,
+                                   log.User.FirstName,
+                                   log.User.LastName,
+                                   ActionType = log.ActionType.ToString(),
+                                   log.DateTime
+                               };
+                    }
+                case "LogsByAll":
+                    {
+                        return from log in db.Logs
+                               orderby log.Id ascending
+                               where log.DateTime.Date.ToString() == arg1 && log.User.Id == Convert.ToInt16(arg2) && log.ActionType == (ActionTypes)Enum.Parse(typeof(ActionTypes), arg3)
+                               select new
+                               {
+                                   log.Id,
+                                   UserId = log.User.Id,
+                                   log.User.FirstName,
+                                   log.User.LastName,
+                                   ActionType = log.ActionType.ToString(),
+                                   log.DateTime
+                               };
                     }
                 default:
                     {
@@ -192,6 +325,12 @@ namespace LegaSport.Logic.CRUD
                    select items;
         }
 
+        // Return UserType as string 
+        public string ReturnUserType(int id)
+        {
+            return db.Users.Single(user => user.Id == id).UserType.ToString();
+        }
+
         // Return List Methods
         public List<string> GetList(string s)
         {
@@ -200,17 +339,32 @@ namespace LegaSport.Logic.CRUD
                 case "ByItem":
                     {
                         return (from sale in db.Sales
-                               select sale.Item.ItemType.ToString()).Distinct().ToList();
+                                select sale.Item.ItemType.ToString()).Distinct().ToList();
                     }
                 case "BySalesMan":
                     {
-                        return(from sale in db.Sales
+                        return (from sale in db.Sales
                                 select sale.User.Id.ToString()).Distinct().ToList();
                     }
                 case "ByDate":
                     {
                         return (from sale in db.Sales
                                 select sale.SaleDate.Date.ToString()).Distinct().ToList();
+                    }
+                case "ByLogUserId":
+                    {
+                        return (from log in db.Logs
+                                select log.User.Id.ToString()).Distinct().ToList();
+                    }
+                case "ByLogAction":
+                    {
+                        return (from log in db.Logs
+                                select log.ActionType.ToString()).Distinct().ToList();
+                    }
+                case "ByLogDate":
+                    {
+                        return (from log in db.Logs
+                                select log.DateTime.Date.ToString()).Distinct().ToList();
                     }
                 default:
                     {

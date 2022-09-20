@@ -21,16 +21,20 @@ Features:
 Software Requirements:
 •	Windows 10
 •	Microsoft SQL Server
+
 Hardware Components:
 •	Processor – i5
 •	Hard Disk – 5 GB
 •	Memory – 1GB RAM
+
 Advantages:
 •	Salesmen can easily search for items in stock in order to make sales.
 •	Managers can easily inspect sales & salesmen performance.
 •	Admin can easily inspect workers performance & more via the logs which are created for every single user action.
+
 Disadvantages:
 •	Desktop only.
+
 Application:
 This application is useful for many Stores. This application can be used for selling other products with little modification of the system.
 

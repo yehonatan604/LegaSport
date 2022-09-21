@@ -4,6 +4,7 @@ This is a desktop software for managing a sport store, including sales & Stock m
 An employee using the system for the first time will have to register with his personal details, the default user type is Salesman, the admin can change user type if needed.
 
 The software's main view is divided into 5 sections:
+
 •	Stock – this is the default view; salesmen can view the stock & sell from that screen.
 
 •	Edit Stock – this view is limited for manager access; the manager can manage stock from that screen.
@@ -17,6 +18,7 @@ The software's main view is divided into 5 sections:
 
 
 Features:
+
 •	User Registration: - In this module user must register himself by filling some personal details.
 
 •	User Login: - After registration user will enter Email and password for logging in order to get access to the system.
@@ -33,12 +35,14 @@ Features:
 
 
 Software Requirements:
+
 •	Windows 10
 
 •	Microsoft SQL Server
 
 
 Hardware Components:
+
 •	Processor – i5
 
 •	Hard Disk – 5 GB
@@ -47,6 +51,7 @@ Hardware Components:
 
 
 Advantages:
+
 •	Salesmen can easily search for items in stock in order to make sales.
 
 •	Managers can easily inspect sales & salesmen performance.
@@ -55,14 +60,17 @@ Advantages:
 
 
 Disadvantages:
+
 •	Desktop only.
 
 
 Application:
+
 This application is useful for many Stores. This application can be used for selling other products with little modification of the system.
 
 
 Project Features:
+
 •	Visitor Registration/ Login module.
 
 •	Salesmen may search through the store's stock.

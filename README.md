@@ -16,7 +16,6 @@ The software's main view is divided into 5 sections:
 •	Logs - this view is limited for admin only; the admin can inspect logs & save them to txt files.
 
 
-
 Features:
 
 •	User Registration: - In this module user must register himself by filling some personal details.
@@ -40,6 +39,7 @@ Software Requirements:
 
 •	Microsoft SQL Server
 
+•	Visual Studio
 
 Hardware Components:
 
@@ -49,7 +49,6 @@ Hardware Components:
 
 •	Memory – 1GB RAM
 
-
 Advantages:
 
 •	Salesmen can easily search for items in stock in order to make sales.
@@ -58,20 +57,17 @@ Advantages:
 
 •	Admin can easily inspect workers performance & more via the logs which are created for every single user action.
 
-
 Disadvantages:
 
 •	Desktop only.
-
 
 Application:
 
 This application is useful for many Stores. This application can be used for selling other products with little modification of the system.
 
-
 Project Features:
 
-•	Visitor Registration/ Login module.
+•	User Registration/ Login module.
 
 •	Salesmen may search through the store's stock.
 
@@ -84,3 +80,23 @@ Project Features:
 •	Admin can monitor everything through the logs.
 
 •	Logs can be saved to txt file.
+
+Code Features:
+
+•	The program is divided into 3 projects for implementing the MVC design pattern. 
+
+•	Database is created with Entity Framework Core.
+
+•	All queries are written in LINQ.
+
+•	The Db connector in the controller is Singleton.
+
+•	The controller is divided into reader & writer.
+
+•	Validations are made using Regex.
+
+•	Passwords are encoded to MD5 Hash.
+
+•	The View can be replaced easily.
+
+
